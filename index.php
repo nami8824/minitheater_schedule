@@ -75,16 +75,6 @@ if($w == 5){
   $sat = date('n/j', $timestamp + $day_second);
 }
 
-if($w == 5){
-  $sun = date('n/j', $timestamp - (6 * $day_second));
-  $mon = date('n/j', $timestamp - (5 * $day_second));
-  $tue = date('n/j', $timestamp - (4 * $day_second ));
-  $wed = date('n/j', $timestamp - (3 * $day_second));
-  $thu = date('n/j', $timestamp - (2 * $day_second));
-  $fri = date('n/j', $timestamp - $day_second);
-  $sat = date('n/j', $timestamp);
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -99,10 +89,10 @@ if($w == 5){
 
 <nav class="navA">
 <div class="container">
-  <h1>MINI THEATER SCHEDULE</h1>
+  <a href="index.php"><h1>MINI THEATER SCHEDULE</h1></a>
   <div class="sub">
     <ul>
-      <a href=""><li>投稿する</li></a>
+      <a href="post.php"><li>投稿する</li></a>
       <a href=""><li>記録を見る</li></a>
       <a href=""><li>ログアウト</li></a>
     </ul>
@@ -111,7 +101,7 @@ if($w == 5){
 </nav>
 
 <nav class="navB">
-  <a href="practice.php?week_count=
+  <a href="index.php?week_count=
     <?php if(isset($week_count)){
       $week_count --;
       echo "$week_count";
@@ -121,7 +111,7 @@ if($w == 5){
     ?>"><span class="fa fa-angle-double-left"></span>前の週へ</a>
 
 
-  <a href="practice.php?week_count=
+  <a href="index.php?week_count=
     <?php if(isset($week_count)){
       $week_count +=2;
       echo "$week_count";
