@@ -1,0 +1,174 @@
+@charset "UTF-8";
+
+:root{
+	--main-color: #5D9AB2;
+	--accent-color: #BF6A7A;
+	--dark-main-color: #2B5566;
+	--text-bright-color: #fff;
+	--icon-color: #fff;
+	--icon-bk-color: #ddd;
+	--gray-color: #ddd;
+	--large-width: 1000px;
+	--middle-width: 800px; 
+}
+
+body, h1, ul {
+	margin: 0;
+}
+
+@media(max-width: 599px){
+	:root {
+		font-size: 12px;
+	}
+}
+
+@media(mix-width: 600px) and (max-width: 799px) {
+	:root {
+		font-size: 14px;
+	}
+}
+
+@media(min-width: 800px){
+	:root {
+		font-size: 16px;
+	}
+}
+
+.navA{
+	padding: 8px;
+}
+
+
+.navA h1{
+	text-align: center;
+	margin-bottom: 6px;
+	font-size: 28px;
+	font-family: 'Monoton', cursive;
+}
+
+.navA a {
+	text-decoration: none;
+	color: inherit;
+	font-size: 11px;
+}
+
+.navA a:hover {
+	opacity: 0.6;
+}
+
+.navA ul {
+	list-style-type: none;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+}
+
+.navA li:not(last-child) {
+	margin-right: 8px;
+}
+
+@media(min-width: 768px){
+	.navA .container{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.navA h1{
+		margin: 0;
+	}
+
+	.navA .container{
+		text-align: center;
+		max-width: 1100px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	
+}
+
+.navB {
+	margin-bottom: 16px;
+	border-bottom: 1px solid;
+}
+
+.navB {
+	text-align: center;
+}
+
+
+.navB a {
+	text-decoration: none;
+	color: inherit;
+	font-size: 13px;
+}
+
+.navB a:first-child {
+	margin-right: 20px;
+}
+
+.navB a:hover {
+	opacity: 0.6;
+}
+
+
+.day {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	justify-content: center;
+	width: 3.5em;
+	height: 3.5em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 5px;
+	background-color: #666;
+	color: #fff;
+	font-weight: bold;
+	border-radius: 50%;
+}
+
+.day p {
+	margin: 0;
+	font-size: 10px;
+}
+
+@media(max-width: 767px){
+	.conB{
+		width: 80vw;
+		border: dotted 1px;
+		min-height: 40vh;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 15px;
+	}
+}
+
+
+
+@media(min-width: 768px){
+	.content .container{
+		display: flex;
+		justify-content: center;
+	}
+
+	.conB{
+		width: 100px;
+		border: dotted 1px;
+		min-height: 65vh;
+	}
+
+	.conB:not(last-child){
+		margin-left: 4px;
+	}
+}
+
+@media(min-width: 900px){
+	
+	.conB{
+		width: 150px;
+	}
+}
+
+
