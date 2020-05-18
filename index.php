@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 $day_second = 86400;
 
@@ -6,6 +7,9 @@ if(empty($_GET)){
   $timestamp = time();
 }
 
+if(isset($_SESSION['from'])){
+  $_SESSION['from'] = null;
+}
 
 if(!empty($_GET)){
   $week_count = $_GET['week_count'];
@@ -89,12 +93,16 @@ if($w == 5){
 
 <nav class="navA">
 <div class="container">
-  <a href="index.php"><h1>MINI THEATER SCHEDULE</h1></a>
+  <a href="index.php"><h1>MINI  THEATER  SCHEDULE</h1></a>
   <div class="sub">
     <ul>
       <a href="post.php"><li>投稿する</li></a>
       <a href=""><li>記録を見る</li></a>
+      <?php if(empty($_SESSION['user_id'])) :?>
+      <a href="login.php"><li>ログイン</li></a>
+      <?php else: ?>
       <a href=""><li>ログアウト</li></a>
+      <?php endif; ?>
     </ul>
   </div>
 </div>

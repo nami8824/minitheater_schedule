@@ -1,4 +1,12 @@
 <?php
+
+session_start();
+if(empty($_SESSION['user_id'])){
+  $_SESSION['from'] = 'post';
+  header('Location:login.php');
+  exit();
+}
+
 echo '<pre>';
 echo var_dump($_POST);
 echo '</pre>';
@@ -16,7 +24,7 @@ echo '</pre>';
 
 <nav class="navA navA--post">
 <div class="container">
-  <a href="index.php"><h1>MINI THEATER SCHEDULE</h1></a>
+  <a href="index.php"><h1>MINI  THEATER  SCHEDULE</h1></a>
   <div class="sub">
     <ul>
       <a href=""><li>記録を見る</li></a>
@@ -59,7 +67,7 @@ echo '</pre>';
     <?php endfor; ?>   
     </select><span class="little">  時</span>
     <select name="minute" id="">
-    <?php for($i = 0; $i <= 59 ; $i++): ?>
+    <?php for($i = 0; $i <= 59 ; $i+=5): ?>
     <option value=<?= $i; ?>><?= $i; ?></option> 
     <?php endfor; ?>
     </select><span class="little">  分</span>
