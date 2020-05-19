@@ -17,7 +17,7 @@ if(!empty($_POST)){
 
   if(empty($error)){
     $db = getDb();
-    $stmt = $db->prepare('SELECT * FROM user WHERE user_name = ? AND password = ?');
+    $stmt = $db->prepare('SELECT * FROM users WHERE user_name = ? AND password = ?');
     $stmt->bindValue(1,$_POST['name']);
     $stmt->bindValue(2,sha1($_POST['password']));
     $stmt->execute();
@@ -44,7 +44,7 @@ if(!empty($_POST)){
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>サンプル</title>
+<title>login</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet"> 

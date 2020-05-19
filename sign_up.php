@@ -7,7 +7,7 @@ if(!empty($_POST)){
     $error['name'] = '名前を入力してください';
   }else{
     $db = getDb();
-    $stmt = $db->prepare('SELECT COUNT(*) as count FROM user WHERE user_name = ?');
+    $stmt = $db->prepare('SELECT COUNT(*) as count FROM users WHERE user_name = ?');
     $stmt->bindValue(1, $_POST['name']);
     $stmt->execute();
     $record = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -26,7 +26,7 @@ if(!empty($_POST)){
 
   if(empty($error)){
     $db = getDb();
-    $stmt = $db->prepare('INSERT INTO user(user_name, password) VALUES(?, ?)');
+    $stmt = $db->prepare('INSERT INTO users(user_name, password) VALUES(?, ?)');
     $stmt->bindValue(1,$_POST['name']);
     $stmt->bindValue(2,sha1($_POST['password']));
     $stmt->execute();
@@ -50,7 +50,7 @@ if(!empty($_POST)){
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>サンプル</title>
+<title>sign_up</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet"> 
