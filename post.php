@@ -2,6 +2,8 @@
 
 session_start();
 require_once 'functions.php';
+$color_of_place = ['新文芸坐' => 'gray' ,'早稲田松竹' => 'brown','シアター・イメージォーラム' => 'red', 'ユーロスペース' => 'lightgreen', 'シネマヴェーラ渋谷' => 'green', '下高井戸シネマ' => 'yellow', 'アンスティチュ・フランセ東京' => 'lightblue','国立映画アーカイブ' => 'white' ,'新宿武蔵野館' => 'purple','その他' => 'black'];
+
 
 if(empty($_SESSION['user_id'])){
   $_SESSION['from'] = 'post';
@@ -21,16 +23,22 @@ if(!empty($_POST)){
     $time = $hour . $minute;
     $format_time = $hour . ':' . $minute;
 
-  
+    foreach($color_of_place as $place => $color){
+      if($place === $_POST['place']){
+        $color_of_place = $color;
+      }
+    }
+
     $db = getDb();
-    $stmt = $db->prepare('INSERT INTO posts(title, day, time, format_time, place, user_id) VALUES(?, ?, ?, ?, ?, ?)');
+    $stmt = $db->prepare('INSERT INTO posts(title, day, time, format_time, place, color_of_place, user_id) VALUES(?, ?, ?, ?, ?, ?, ?)');
   
     $stmt->bindValue(1, $_POST['title']);
     $stmt->bindValue(2, $_POST['date']);
     $stmt->bindValue(3, (int)$time, PDO::PARAM_INT);
     $stmt->bindValue(4, $format_time);
     $stmt->bindValue(5, $_POST['place']);
-    $stmt->bindValue(6, (int)$_SESSION['user_id'], PDO::PARAM_INT);
+    $stmt->bindValue(6, $color_of_place);
+    $stmt->bindValue(7, (int)$_SESSION['user_id'], PDO::PARAM_INT);
   
     $stmt->execute();
   }
@@ -47,7 +55,7 @@ $minute_array =['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50'
 <title>post</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&display=swap" rel="stylesheet">  
 </head>
 <body>
 
@@ -87,7 +95,7 @@ $minute_array =['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50'
         <option value="ユーロスペース" <?php if(isset($_POST['place']) && enc($_POST['place']) === 'ユーロペース'){ echo 'selected'; }?> >ユーロペース</option>
         <option value="シネマヴェーラ渋谷" <?php if(isset($_POST['place']) && enc($_POST['place']) === 'シネマヴェーラ渋谷'){ echo 'selected'; }?>>シネマヴェーラ渋谷</option>
         <option value="下高井戸シネマ" <?php if(isset($_POST['place']) && enc($_POST['place']) === '下高井戸シネマ'){ echo 'selected'; }?>>下高井戸シネマ</option>
-        <option value="アンスティチュ・フンセ 東京" <?php if(isset($_POST['place']) && enc($_POST['place']) === 'アンスティチュ・フランセ京'){ echo 'selected'; }?>>アンスティチュ・フランセ京</option>
+        <option value="アンスティチュ・フランセ東京" <?php if(isset($_POST['place']) && enc($_POST['place']) === 'アンスティチュ・フランセ京'){ echo 'selected'; }?>>アンスティチュ・フランセ東京</option>
         <option value="国立映画アーカイブ" <?php if(isset($_POST['place']) && enc($_POST['place']) === '国立映画アーカイブ'){ echo 'selected'; }?>>国立映画アーカイブ</option>
         <option value="新宿武蔵野館" <?php if(isset($_POST['place']) && enc($_POST['place']) === '新宿蔵野館'){ echo 'selected'; }?>>新宿蔵野館</option>
         <option value="その他" <?php if(isset($_POST['place']) && enc($_POST['place']) === 'その他'){ echo 'selected'; }?>>その他</option>

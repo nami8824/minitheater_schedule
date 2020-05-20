@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 require_once 'functions.php';
 
@@ -7,13 +6,17 @@ if(isset($_SESSION['from'])){
   $_SESSION['from'] = null;
 }
 
+
+
+
+
 $seconds_of_day = 86400;
 
-if(empty($_GET)){
-  $target_time = time();
-}else{
-  $week_count = $_GET['week_count'];
+if(isset($_GET['week_count'])){
+  $week_count = (int)$_GET['week_count'];
   $target_time = time() + $seconds_of_day * 7 * $week_count;
+}else{
+  $target_time = time();
 }
 
 $one_day_before = $target_time - $seconds_of_day; 
@@ -102,19 +105,50 @@ if($day_of_week === 'Sat'){
 }
 
 
+echo '<pre>';
+echo var_dump($_SESSION);
+echo '</pre>';
 
-$db = getDb();
-$stmt = $db->prepare('SELECT * FROM posts LEFT JOIN users ON posts.user_id = users.user_id WHERE posts.day in (?, ?, ?, ? ,? ,? ,?)');
-$stmt->bindValue(1, $sun_detail);
-$stmt->bindValue(2, $mon_detail);
-$stmt->bindValue(3, $tue_detail);
-$stmt->bindValue(4, $wed_detail);
-$stmt->bindValue(5, $thu_detail);
-$stmt->bindValue(6, $fri_detail);
-$stmt->bindValue(7, $sat_detail);
-$stmt->execute();
-$records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if(isset($_SESSION['user_id'])){
+  if(empty($_GET['user_select']) && !isset($week_count) ){
+    $_SESSION['user_select'] = 'all';
+  }
+}
 
+if(isset($_GET['user_select'])){
+  if($_GET['user_select'] === 'self'){
+    $_SESSION['user_select'] = 'self';
+  }else{
+    $_SESSION['user_select'] ='all';
+  }
+}
+
+if(isset($_SESSION['user_id']) && $_SESSION['user_select'] === 'self' ){
+  $db = getDb();
+  $stmt = $db->prepare('SELECT * FROM posts LEFT JOIN users ON posts.user_id = users.user_id WHERE posts.day in (?, ?, ?, ? ,? ,? ,?) AND posts.user_id = ? ORDER BY posts.time, posts.user_id ');
+  $stmt->bindValue(1, $sun_detail);
+  $stmt->bindValue(2, $mon_detail);
+  $stmt->bindValue(3, $tue_detail);
+  $stmt->bindValue(4, $wed_detail);
+  $stmt->bindValue(5, $thu_detail);
+  $stmt->bindValue(6, $fri_detail);
+  $stmt->bindValue(7, $sat_detail);
+  $stmt->bindValue(8, (int)$_SESSION['user_id'], PDO::PARAM_INT);
+  $stmt->execute();
+  $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}else{
+  $db = getDb();
+  $stmt = $db->prepare('SELECT * FROM posts LEFT JOIN users ON posts.user_id = users.user_id WHERE posts.day in (?, ?, ?, ? ,? ,? ,?)   ORDER BY posts.time, posts.user_id');
+  $stmt->bindValue(1, $sun_detail);
+  $stmt->bindValue(2, $mon_detail);
+  $stmt->bindValue(3, $tue_detail);
+  $stmt->bindValue(4, $wed_detail);
+  $stmt->bindValue(5, $thu_detail);
+  $stmt->bindValue(6, $fri_detail);
+  $stmt->bindValue(7, $sat_detail);
+  $stmt->execute();
+  $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 $sun_records = [];
 $mon_records = [];
 $tue_records = [];
@@ -155,7 +189,7 @@ foreach($records as $record){
 <title>MINI  THEATER  SCHEDULE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&display=swap" rel="stylesheet">  
 </head>
 <body>
 
@@ -177,6 +211,8 @@ foreach($records as $record){
 </nav>
 
 <nav class="navB">
+<div class="container">
+  
   <a href="index.php?week_count=
     <?php if(isset($week_count)){
       $week_count --;
@@ -186,7 +222,6 @@ foreach($records as $record){
     }
     ?>"><span class="fa fa-angle-double-left"></span>前の週へ</a>
 
-
   <a href="index.php?week_count=
     <?php if(isset($week_count)){
       $week_count +=2;
@@ -195,6 +230,16 @@ foreach($records as $record){
       echo "1";
     }
     ?>">次の週へ<span class="fa fa-angle-double-right"></span></a>
+
+  <?php if(isset($_SESSION['user_id'])): ?>
+  <?php if($_SESSION['user_select'] === 'all'): ?>
+  <a href="index.php?user_select=self<?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1); } ?>">自分の投稿だけ見る</a>
+  <?php else: ?>
+  <a href="index.php?user_select=all<?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1); } ?>">みんなの投稿を見る</a>
+  <?php endif;?>
+  <?php endif; ?>
+
+</div>
 </nav>
 
 <section class="content">
@@ -205,6 +250,21 @@ foreach($records as $record){
         <p><?= '日' ?></p>
       </div> 
       <div class="conB">
+
+      <?php foreach($sun_records as $sun_record): ?>
+      <article class="plan">
+        <ul>
+          <li class="title"><span class="fas fa-film"></span><?= $sun_record['title']; ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= $sun_record['format_time']; ?>〜</li> 
+          <li><span class="place <?= $sun_record['color_of_place'] ?>">@<?= $sun_record['place']; ?></span></li>
+          <li class="user_name">投稿者: <?= $sun_record['user_name']; ?></li>
+          <?php if(isset($_SESSION['user_id']) && $sun_record['user_id'] === $_SESSION['user_id']): ?>
+          <li><a href="delete_post.php?post_id=<?= $sun_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+          <?php endif; ?>
+        </ul>
+      </article>
+      <?php endforeach; ?>
+
       </div>
     </div>
     <div class="conA">
@@ -213,16 +273,21 @@ foreach($records as $record){
         <p><?= '月' ?></p>
       </div> 
       <div class="conB">
-      <section class="posts">
+
+      <?php foreach($mon_records as $mon_record): ?>
+      <article class="plan">
         <ul>
-        <?php foreach($mon_records as $mon_record): ?>
-          <li><?= $mon_record['title']; ?></li>
-          <li><?= $mon_record['place']; ?></li>
-          <li><?= $mon_record['time']; ?></li>
-          <li><?= $mon_record['user_name']; ?></li>
-        <?php endforeach; ?>
+          <li class="title"><span class="fas fa-film"></span><?= $mon_record['title']; ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= $mon_record['format_time']; ?>〜</li> 
+          <li><span class="place <?= $mon_record['color_of_place'] ?>">@<?= $mon_record['place']; ?></span></li>
+          <li class="user_name">投稿者: <?= $mon_record['user_name']; ?></li>
+          <?php if(isset($_SESSION['user_id']) && $mon_record['user_id'] === $_SESSION['user_id']): ?>
+            <li><a href="delete_post.php?post_id=<?= $mon_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+          <?php endif; ?>
         </ul>
-        </section>
+      </article>
+      <?php endforeach; ?>
+
       </div>
     </div>
     <div class="conA">
@@ -231,14 +296,21 @@ foreach($records as $record){
         <p><?= '火' ?></p>
       </div> 
       <div class="conB">
-      <ul>
+      
       <?php foreach($tue_records as $tue_record): ?>
-        <li><?= $tue_record['title']; ?></li>
-        <li><?= $tue_record['place']; ?></li>
-        <li><?= $tue_record['time']; ?></li>
-        <li><?= $tue_record['user_name']; ?></li>
+      <article class="plan">
+        <ul>
+          <li class="title"><span class="fas fa-film"></span><?= $tue_record['title']; ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= $tue_record['format_time']; ?>〜</li> 
+          <li><span class="place <?= $tue_record['color_of_place'] ?>">@<?= $tue_record['place']; ?></span></li>
+          <li class="user_name">投稿者: <?= $tue_record['user_name']; ?></li>
+          <?php if(isset($_SESSION['user_id']) && $tue_record['user_id'] === $_SESSION['user_id']): ?>
+            <li><a href="delete_post.php?post_id=<?= $tue_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+          <?php endif; ?>
+        </ul>
+      </article>
       <?php endforeach; ?>
-      </ul>
+      
       </div>
     </div>
     <div class="conA">
@@ -246,31 +318,96 @@ foreach($records as $record){
         <p><?= $wed; ?></p>
         <p><?= '水' ?></p>
       </div> 
-      <div class="conB"></div>
+      <div class="conB">
+
+      <?php foreach($wed_records as $wed_record): ?>
+      <article class="plan">
+        <ul>
+          <li class="title"><span class="fas fa-film"></span><?= $wed_record['title']; ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= $wed_record['format_time']; ?>〜</li> 
+          <li><span class="place <?= $wed_record['color_of_place'] ?>">@<?= $wed_record['place']; ?></span></li>
+          <li class="user_name">投稿者: <?= $wed_record['user_name']; ?></li>
+          <?php if(isset($_SESSION['user_id']) && $wed_record['user_id'] === $_SESSION['user_id']): ?>
+            <li><a href="delete_post.php?post_id=<?= $wed_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+          <?php endif; ?>
+        </ul>
+      </article>
+      <?php endforeach; ?>
+
+      </div>
     </div>
     <div class="conA">
       <div class="day">
         <p><?= $thu; ?></p>
         <p><?= '木' ?></p>
       </div> 
-      <div class="conB"></div>
+      <div class="conB">
+
+      <?php foreach($thu_records as $thu_record): ?>
+      <article class="plan">
+        <ul>
+          <li class="title"><span class="fas fa-film"></span><?= $thu_record['title']; ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= $thu_record['format_time']; ?>〜</li> 
+          <li><span class="place <?= $thu_record['color_of_place'] ?>">@<?= $thu_record['place']; ?></span></li>
+          <li class="user_name">投稿者: <?= $thu_record['user_name']; ?></li>
+          <?php if(isset($_SESSION['user_id']) && $thu_record['user_id'] === $_SESSION['user_id']): ?>
+            <li><a href="delete_post.php?post_id=<?= $thu_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+          <?php endif; ?>
+        </ul>
+      </article>
+      <?php endforeach; ?>
+
+      </div>
     </div>
     <div class="conA">
       <div class="day">
         <p><?= $fri; ?></p>
         <p><?= '金' ?></p>
       </div> 
-      <div class="conB"></div>
+      <div class="conB">
+
+      <?php foreach($fri_records as $fri_record): ?>
+      <article class="plan">
+        <ul>
+          <li class="title"><span class="fas fa-film"></span><?= $fri_record['title']; ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= $fri_record['format_time']; ?>〜</li> 
+          <li><span class="place <?= $fri_record['color_of_place'] ?>">@<?= $fri_record['place']; ?></span></li>
+          <li class="user_name">投稿者: <?= $fri_record['user_name']; ?></li>
+          <?php if(isset($_SESSION['user_id']) && $fri_record['user_id'] === $_SESSION['user_id']): ?>
+            <li><a href="delete_post.php?post_id=<?= $fri_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+          <?php endif; ?>
+        </ul>
+      </article>
+      <?php endforeach; ?>
+
+      </div>
     </div>
     <div class="conA">
       <div class="day">
         <p><?= $sat; ?></p>
         <p><?= '土' ?></p>
       </div> 
-      <div class="conB"></div>
+      <div class="conB">
+
+      <?php foreach($sat_records as $sat_record): ?>
+      <article class="plan">
+        <ul>
+          <li class="title"><span class="fas fa-film"></span><?= $sat_record['title']; ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= $sat_record['format_time']; ?>〜</li> 
+          <li><span class="place <?= $sat_record['color_of_place'] ?>">@<?= $sat_record['place']; ?></span></li>
+          <li class="user_name">投稿者: <?= $sat_record['user_name']; ?></li>
+          <?php if(isset($_SESSION['user_id']) && $sat_record['user_id'] === $_SESSION['user_id']): ?>
+            <li><a href="delete_post.php?post_id=<?= $sat_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+          <?php endif; ?>
+        </ul>
+      </article>
+      <?php endforeach; ?>
+
+      </div>
     </div>
   </section>
 </section>
 <script src="https://kit.fontawesome.com/cee2db4d25.js" crossorigin="anonymous"></script>
 </body>
 </html>
+
