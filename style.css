@@ -16,7 +16,11 @@ body, h1, h2, ul {
 	margin: 0;
 }
 
-@media(max-width: 599px){
+body {
+	word-break: break-all;
+}
+
+@media(max-width: 599px) {
 	:root {
 		font-size: 12px;
 	}
@@ -24,26 +28,26 @@ body, h1, h2, ul {
 
 @media(mix-width: 600px) and (max-width: 799px) {
 	:root {
-		font-size: 14px;
+		font-size: 13px;
 	}
 }
 
-@media(min-width: 800px){
+@media(min-width: 800px) {
 	:root {
 		font-size: 16px;
 	}
 }
 
-.navA{
+.navA {
 	padding: 8px;
 }
 
 
-.navA h1{
+.navA h1 {
 	text-align: center;
 	margin-bottom: 6px;
 	font-size: 28px;
-	font-family: 'Monoton', cursive;
+	font-family: 'DM Sans', sans-serif;
 }
 
 .navA a {
@@ -67,26 +71,28 @@ body, h1, h2, ul {
 	margin-right: 8px;
 }
 
-.navA--post{
-	border-bottom: 1px solid;
+.navA--post {
+	border-bottom: 1px solid #cccccc;
 }
 
-.navA--login{
-	border-bottom: 1px solid;
+.navA--login {
+	border-bottom: 1px solid #cccccc;
 }
 
-@media(min-width: 768px){
+@media(min-width: 768px) {
+
+	
 	.navA .container{
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
 
-	.navA h1{
+	.navA h1 {
 		margin: 0;
 	}
 
-	.navA .container{
+	.navA .container {
 		text-align: center;
 		max-width: 1100px;
 		margin-left: auto;
@@ -98,28 +104,54 @@ body, h1, h2, ul {
 
 .navB {
 	margin-bottom: 16px;
-	border-bottom: 1px solid;
+	border-bottom: 1px solid #cccccc;
+	font-size: 13px;
 }
 
-.navB {
+.navB .container {
 	text-align: center;
+	max-width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	justify-content: center;
 }
+
 
 
 .navB a {
 	text-decoration: none;
 	color: inherit;
-	font-size: 13px;
 }
 
-.navB a:first-child {
+.navB a {
 	margin-right: 20px;
+}
+
+.navB a:last-child {
+	margin-left: 20px;
 }
 
 .navB a:hover {
 	opacity: 0.6;
 }
 
+@media(max-width: 767px) {
+	.navB {
+		position: fixed;
+		bottom: 0;
+		background-color: #ffffff;
+		width: 100%;
+		padding: 15px;
+		border-top: 1px solid;
+		margin-bottom: 0;
+	}
+
+	.navA {
+		border-bottom: 1px solid #cccccc;
+		margin-bottom: 30px;
+	}
+}
 
 .day {
 	display: flex;
@@ -142,42 +174,189 @@ body, h1, h2, ul {
 	font-size: 10px;
 }
 
-@media(max-width: 767px){
-	.conB{
-		width: 80vw;
-		border: dotted 1px;
-		min-height: 40vh;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 15px;
-	}
+
+.conB{
+	width: 80vw;
+	border: solid #cccccc 1px;
+	min-height: 20vh;
+	max-height: 70vh;
+	overflow: auto;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 15px;
 }
 
 
 
-@media(min-width: 768px){
-	.content .container{
+
+@media(min-width: 768px) {
+	.content .container {
 		display: flex;
 		justify-content: center;
 	}
 
-	.conB{
-		width: 100px;
+	.conA {
+		width: 13%;
+		min-width: 103px;
+	}
+
+	.conB {
+		width: 100%;
 		border: dotted 1px;
 		min-height: 65vh;
+		max-height: none;
+		overflow: visible;
 	}
 
-	.conB:not(last-child){
-		margin-left: 4px;
+	.conA:not(last-child){
+		margin-right: 4px;
 	}
 }
 
-@media(min-width: 900px){
+
+.conB .plan {
+	border: 1px solid #dedede;
+	background-color: #fbfbfb;
+	margin: 2px;
+	border-radius: 0.2rem;
+	font-size: 0.7rem;
+}
+
+.conB  ul {
+	white-space: normal;
+	list-style-type: none;
+	padding: 0;
+	line-height: 1.7;
+}
+
+.conB .user_name,
+.conB li:last-child {
+	text-align: right;
+	margin-right: 4px;
+}
+
+.conB .title {
+	font-weight: bold;
+	overflow: auto;
+	font-size: 0.8rem;
+	line-height: 1.5;
+	letter-spacing: -0.3px;
+}
+
+.conB .fa-film {
+	color: #555555;
+	display: inline-block;
+	margin-right: 4px;
+}
+
+.conB .fa-clock {
+	color: #555555;
+	display: inline-block;
+	margin-right: 4px;
+}
+
+.conB .place {
+	color: #ffffff;
+	font-size: 0.6rem;
+	padding: 0.2rem;
+	font-weight: bold;
+	border-radius: 0.1rem;
+}
+
+.conB .gray {
+	background-color: #555555;
+}
+.conB .brown {
+	background-color: #990000;
+}
+
+.conB .red {
+	background-color: #ff0000;
+}
+
+.conB .lightgreen {
+	background-color: #00cc00;
+}
+
+.conB .green {
+	background-color: #004400;
+}
+
+.conB .yellow {
+	background-color: #ffff00;
+	color: #000000;
+}
+
+.conB .lightblue {
+	background-color: #00ccff;
+}
+
+.conB .white {
+	background-color: #ffffff;
+	color: #000000;
+}
+
+.conB .purple {
+	background-color: #800080;
+}
+
+.conB .black {
+	background-color: #000000;
+}
+
+@media(max-width: 767px) {
+
+	.conB .plan {
+		border: 1px solid #dedede;
+		background-color: #fbfbfb;
+		margin: 2px;
+		border-radius: 0.2rem;
+		font-size: 1rem;
+	}
 	
-	.conB{
-		width: 150px;
+	.conB  ul {
+		white-space: normal;
+		list-style-type: none;
+		padding: 0;
+		line-height: 1.7;
 	}
+	
+	.conB .user_name,
+	.conB li:last-child {
+		text-align: right;
+		margin-right: 8px;
+	}
+	
+	.conB .title {
+		font-weight: bold;
+		overflow: auto;
+		font-size: 1.3rem;
+		line-height: 1.3;
+		letter-spacing: -0.3px;
+	}
+	
+	.conB .fa-film {
+		color: #555555;
+		display: inline-block;
+		margin-right: 4px;
+	}
+	
+	.conB .fa-clock {
+		color: #555555;
+		display: inline-block;
+		margin-right: 4px;
+	}
+	
+	.conB .place {
+		color: #ffffff;
+		font-size: 1rem;
+		padding: 0.2rem;
+		font-weight: bold;
+		border-radius: 0.3rem;
+	}
+	
 }
+
 
 
 
@@ -219,18 +398,18 @@ body, h1, h2, ul {
 	padding: 0;
 }
 
-.post .title{
+.post .title {
 	margin-top: 16px;
 	margin-bottom: 5px;
 	padding: 0;
 }
 
-.post .place{
+.post .place {
 	margin-top: 16px;
 	margin-bottom: 5px;	
 }
 
-.post .submit{
+.post .submit {
 	margin-top: 16px;
 	background-color: #333;
 	color: #fff;
@@ -240,7 +419,7 @@ body, h1, h2, ul {
 	font-weight: bold;
 }
 
-.notice .container{
+.notice .container {
 	min-width: 330px;
 	width: 50vw;
 	margin-left: auto;
@@ -253,26 +432,26 @@ body, h1, h2, ul {
 	text-align: center;
 }
 
-.warning--yellow{
+.warning--yellow {
 	background-color: #FFF9C7;
 }
 
 
-.login .container{
+.login .container {
 	min-width: 330px;
 	width: 50vw;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.login input[name="name"],input[name="password"]{
+.login input[name="name"],input[name="password"] {
 	width: 100%;
 	max-width: 500px;
 	box-sizing: border-box;
 	padding: 3px;
 }
 
-.login{
+.login {
 	margin-top: 4rem;
 }
 
@@ -286,21 +465,21 @@ body, h1, h2, ul {
 	font-size: 0.9rem;
 }
 
-.login a:hover{
+.login a:hover {
 	opacity: 0.6;
 }
 
-.login div,label{
+.login div,label {
 	font-size: 1rem;
 }
 
-.login .name,.password{
+.login .name,.password {
 	margin-top: 16px;
 	margin-bottom: 5px;
 	padding: 0;
 }
 
-.login .submit{
+.login .submit {
 	margin-top: 16px;
 	background-color: #333;
 	color: #fff;
@@ -310,11 +489,11 @@ body, h1, h2, ul {
 	font-weight: bold;
 }
 
-.login .error,.post .error{
+.login .error,.post .error {
 	color: #bb0000;
 	font-size: 0.9rem;
 }
 
-.login ul{
+.login ul {
 	padding-left: 30px;
 }

@@ -47,7 +47,7 @@ if(!empty($_POST)){
 <title>login</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Kulim+Park:ital@1&display=swap" rel="stylesheet"> 
 </head>
 <body>
 
