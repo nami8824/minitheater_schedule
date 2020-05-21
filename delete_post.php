@@ -21,9 +21,6 @@ if(empty($_SESSION['user_id'])){
     exit();
   }
 
-  echo '<pre>';
-  echo var_dump($week_count);
-  echo '</pre>';
 
   $db = getDb();
   $stmt = $db->prepare('DELETE FROM posts WHERE post_id = ?');

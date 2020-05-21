@@ -233,7 +233,7 @@ foreach($records as $record){
       <?php if(empty($_SESSION['user_id'])) :?>
       <a href="login.php"><li>ログイン</li></a>
       <?php else: ?>
-      <a href=""><li>ログアウト</li></a>
+      <a href="logout.php"><li>ログアウト</li></a>
       <?php endif; ?>
     </ul>
   </div>
