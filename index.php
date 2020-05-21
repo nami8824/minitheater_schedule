@@ -3,6 +3,7 @@ session_start();
 require_once 'functions.php';
 
 if(isset($_SESSION['from'])){
+  $_SESSION['user_select'] = 'all';
   $_SESSION['from'] = null;
 }
 
@@ -18,6 +19,39 @@ if(isset($_GET['week_count'])){
 }else{
   $target_time = time();
 }
+
+if(isset($_SESSION['time_from_post'])){
+  $target_time = $_SESSION['time_from_post'];
+  $_SESSION['time_from_post'] = null;
+  $present_time = time();
+  $day_of_week = date('D', $present_time);
+  $x = ($target_time - $present_time) / $seconds_of_day;
+  if($day_of_week === 'Sun'){
+    $week_count = floor(($x - 7) / 7) + 1;
+   }
+  if($day_of_week === 'Mon'){
+    $week_count = floor(($x - 6) / 7) + 1;
+   }
+  if($day_of_week === 'Tue'){
+    $week_count = floor(($x - 5) / 7) + 1;
+   }
+  if($day_of_week === 'Wed'){
+    $week_count = floor(($x - 4) / 7) + 1;
+   }
+  if($day_of_week === 'Thu'){
+    $week_count = floor(($x - 3) / 7) + 1;
+   }
+  if($day_of_week === 'Fri'){
+    $week_count = floor(($x - 2) / 7) + 1;
+  }
+  if($day_of_week === 'Sat'){
+   $week_count = floor(($x - 1) / 7) + 1;
+  }
+  
+
+
+}
+
 
 $one_day_before = $target_time - $seconds_of_day; 
 $two_days_before = $target_time - 2 * $seconds_of_day;
@@ -104,10 +138,6 @@ if($day_of_week === 'Sat'){
   list($sat, $sat_detail) = [date('n/j', $target_time), date('Y-m-d', $target_time)];
 }
 
-
-echo '<pre>';
-echo var_dump($_SESSION);
-echo '</pre>';
 
 if(isset($_SESSION['user_id'])){
   if(empty($_GET['user_select']) && !isset($week_count) ){
