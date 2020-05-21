@@ -33,7 +33,7 @@ if(!empty($_POST)){
     $user_id = $db->lastInsertId();
     $db = null;
 
-    $_SESSION['user_id'] = $user_id;
+    $_SESSION['user_id'] = (int)$user_id;
     if(isset($_SESSION['from']) && $_SESSION['from'] === 'post'){
       header('Location:post.php');   
       exit();

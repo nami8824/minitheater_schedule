@@ -41,6 +41,13 @@ if(!empty($_POST)){
     $stmt->bindValue(7, (int)$_SESSION['user_id'], PDO::PARAM_INT);
   
     $stmt->execute();
+
+    $date = new DateTime($_POST['date']);
+    $_SESSION['time_from_post'] = $date->getTimestamp();
+    if(date('D', $_SESSION['time_from_post']) === 'Sun' ){
+      $_SESSION['time_from_post'] += 60 * 60 * 24;
+    }
+    header('Location:index.php');
   }
 }
 
