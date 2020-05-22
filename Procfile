@@ -1,1 +1,1 @@
-web: vendor/bin/heroku-php-apache2 minitheater_schedule/
+web: vendor/bin/heroku-php-apache2 /
