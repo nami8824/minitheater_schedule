@@ -2,6 +2,8 @@
 
 session_start();
 require_once 'functions.php';
+
+
 $color_of_place = ['新文芸坐' => 'gray' ,'早稲田松竹' => 'brown','シアター・イメージォーラム' => 'red', 'ユーロスペース' => 'lightgreen', 'シネマヴェーラ渋谷' => 'green', '下高井戸シネマ' => 'yellow', 'アンスティチュ・フランセ東京' => 'lightblue','国立映画アーカイブ' => 'white' ,'新宿武蔵野館' => 'purple','その他' => 'black'];
 
 
@@ -22,6 +24,7 @@ if(!empty($_POST)){
     $minute = $_POST['minute'];
     $time = $hour . $minute;
     $format_time = $hour . ':' . $minute;
+    $month = mb_substr($_POST['date'], 5, 2);
 
     foreach($color_of_place as $place => $color){
       if($place === $_POST['place']){
@@ -30,15 +33,16 @@ if(!empty($_POST)){
     }
 
     $db = getDb();
-    $stmt = $db->prepare('INSERT INTO posts(title, day, time, format_time, place, color_of_place, user_id) VALUES(?, ?, ?, ?, ?, ?, ?)');
+    $stmt = $db->prepare('INSERT INTO posts(title, day, time, month, format_time, place, color_of_place, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)');
   
     $stmt->bindValue(1, $_POST['title']);
     $stmt->bindValue(2, $_POST['date']);
     $stmt->bindValue(3, (int)$time, PDO::PARAM_INT);
-    $stmt->bindValue(4, $format_time);
-    $stmt->bindValue(5, $_POST['place']);
-    $stmt->bindValue(6, $color_of_place);
-    $stmt->bindValue(7, (int)$_SESSION['user_id'], PDO::PARAM_INT);
+    $stmt->bindValue(4, (int)$month, PDO::PARAM_INT);
+    $stmt->bindValue(5, $format_time);
+    $stmt->bindValue(6, $_POST['place']);
+    $stmt->bindValue(7, $color_of_place);
+    $stmt->bindValue(8, (int)$_SESSION['user_id'], PDO::PARAM_INT);
   
     $stmt->execute();
 
@@ -71,8 +75,8 @@ $minute_array =['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50'
   <a href="index.php"><h1>MINI  THEATER  SCHEDULE</h1></a>
   <div class="sub">
     <ul>
-      <a href=""><li>記録を見る</li></a>
-      <a href=""><li>ログアウト</li></a>
+      <a href="my_posts.php"><li>記録を見る</li></a>
+      <a href="logout.php"><li>ログアウト</li></a>
     </ul>
   </div>
 </div>

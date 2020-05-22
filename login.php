@@ -2,8 +2,12 @@
 require_once 'functions.php';
 session_start();
 
-if(isset($_SESSION['from']) && $_SESSION['from'] === 'post'){
-  $notice = '投稿するにはログインが必要です';
+if(isset($_SESSION['from'])){
+  if($_SESSION['from'] === 'post'){
+    $notice = '投稿するにはログインが必要です';
+  }else{
+    $notice = '記録を見るにはログインが必要です';
+  }
 }
 
 if(!empty($_POST)){
@@ -28,9 +32,14 @@ if(!empty($_POST)){
     }else{
       $user_id = $record['user_id'];
       $_SESSION['user_id'] = $user_id;
-      if(isset($_SESSION['from']) && $_SESSION['from'] === 'post'){
+      if(isset($_SESSION['from'])){
+        if($_SESSION['from'] === 'post'){
         header('Location:post.php');   
         exit();
+        }else{
+        header('Location:my_posts.php');   
+        exit();
+        }
       }
   
       header('Location:index.php');

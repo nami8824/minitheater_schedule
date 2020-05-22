@@ -34,9 +34,14 @@ if(!empty($_POST)){
     $db = null;
 
     $_SESSION['user_id'] = (int)$user_id;
-    if(isset($_SESSION['from']) && $_SESSION['from'] === 'post'){
+    if(isset($_SESSION['from'])){
+      if($_SESSION['from'] === 'post'){
       header('Location:post.php');   
       exit();
+      }else{
+      header('Location:my_posts.php');   
+      exit();
+      }
     }
 
     header('Location:index.php');
