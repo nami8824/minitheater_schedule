@@ -229,7 +229,7 @@ foreach($records as $record){
   <div class="sub">
     <ul>
       <a href="post.php"><li>投稿する</li></a>
-      <a href=""><li>記録を見る</li></a>
+      <a href="my_posts.php"><li>記録を見る</li></a>
       <?php if(empty($_SESSION['user_id'])) :?>
       <a href="login.php"><li>ログイン</li></a>
       <?php else: ?>
