@@ -1,4 +1,5 @@
 <?php
+//  ローカルのデータベース接続用
 // function getDb(){
 //   $dsn = 'mysql:dbname=schedule;host=localhost;charset=utf8';
 //   $user = 'root';

@@ -2,6 +2,8 @@
 require_once 'functions.php';
 session_start();
 
+
+// post.php、my_post.phpからリダイレクトしてきたときにメッセージを設定
 if(isset($_SESSION['from'])){
   if($_SESSION['from'] === 'post'){
     $notice = '投稿するにはログインが必要です';
@@ -75,7 +77,7 @@ if(!empty($_POST)){
 <?php if(isset($notice)) :?>
 <div class="notice">
   <div class="container">
-  <div class="warning warning--yellow"><?= $notice; ?></div>
+  <div class="warning"><span class="fas fa-exclamation-triangle"></span> <?= $notice; ?></div>
   </div>
 </div>
 <?php endif ;?>
@@ -83,7 +85,7 @@ if(!empty($_POST)){
 <section class="login">
 <div class="container">
 
-  <h2>ログイン</h2>
+  <h2><span class="fas fa-sign-in-alt"> ログイン</h2>
   <div><a href="sign_up.php">※登録がまだの方はこちらから</a></div>
 
   <?php if(!empty($error)): ?>
@@ -95,19 +97,16 @@ if(!empty($_POST)){
   <?php endif; ?>
   
   <form action="login.php" method="post">
-    <div class="name"><label for="name" >ユーザー名</label></div>
+    <div class="name"><label for="name"><span class="fas fa-user"></span>  ユーザー名</label></div>
     <div><input id="name" type="text" name="name" value="<?php if(isset($_POST['name'])){ echo($_POST['name']); } ?>"></div>
 
-    <div class="password"><label for="password" >パスワード</label></div>
+    <div class="password"><label for="password" ><span class="fas fa-lock"></span> パスワード</label></div>
     <div><input id="password" type="password" name="password" value="<?php if(isset($_POST['password'])){ echo($_POST['password']); } ?>"></div>
     <div><input type="submit" class="submit"></div>
     
   </form>
 </div>
 </section>
-
-
-
 
 <script src="https://kit.fontawesome.com/cee2db4d25.js" crossorigin="anonymous"></script>
 </body>
