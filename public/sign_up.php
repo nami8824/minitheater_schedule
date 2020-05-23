@@ -77,7 +77,7 @@ if(!empty($_POST)){
 <section class="login">
 <div class="container">
 
-  <h2>新規登録</h2>
+  <h2><span class="fas fa-user-plus"></span> 新規登録</h2>
   
   <?php if(!empty($error)): ?>
   <ul class="error">
@@ -88,10 +88,10 @@ if(!empty($_POST)){
   <?php endif; ?>
 
   <form action="sign_up.php" method="post">
-    <div class="name"><label for="name" >ユーザー名</label></div>
+    <div class="name"><label for="name" ><span class="fas fa-user"></span> ユーザー名</label></div>
     <div><input id="name" type="text" name="name" value="<?php if(isset($_POST['name'])){ echo($_POST['name']); } ?>" ></div>
 
-    <div class="password"><label for="password" >パスワード</label></div>
+    <div class="password"><label for="password" ><span class="fas fa-lock"></span> パスワード</label></div>
     <div><input id="password" type="password" name="password" value="<?php if(isset($_POST['password'])){ echo($_POST['password']); } ?>" ></div>
     <div><input type="submit" class="submit"></div>
     

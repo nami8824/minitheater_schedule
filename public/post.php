@@ -4,14 +4,13 @@ session_start();
 require_once 'functions.php';
 
 
-$color_of_place = ['新文芸坐' => 'gray' ,'早稲田松竹' => 'brown','シアター・イメージォーラム' => 'red', 'ユーロスペース' => 'lightgreen', 'シネマヴェーラ渋谷' => 'green', '下高井戸シネマ' => 'yellow', 'アンスティチュ・フランセ東京' => 'lightblue','国立映画アーカイブ' => 'white' ,'新宿武蔵野館' => 'purple','その他' => 'black'];
-
-
+// ログインしていない場合、login.phpにリダイレクトさせる
 if(empty($_SESSION['user_id'])){
   $_SESSION['from'] = 'post';
   header('Location:login.php');
   exit();
 }
+
 
 if(!empty($_POST)){
   if(empty($_POST['title'])){
@@ -25,6 +24,10 @@ if(!empty($_POST)){
     $time = $hour . $minute;
     $format_time = $hour . ':' . $minute;
     $month = mb_substr($_POST['date'], 5, 2);
+
+    // 映画館ごとにカラーを設定する
+    // このカラーをpostsテーブルの列として設定
+    $color_of_place = ['新文芸坐' => 'gray' ,'早稲田松竹' => 'brown','シアター・イメージォーラム' => 'red', 'ユーロスペ   ース' => 'lightgreen', 'シネマヴェーラ渋谷' => 'green', '下高井戸シネマ' => 'yellow', 'アンスティチュ・フランセ東京   ' => 'lightblue','国立映画アーカイブ' => 'white' ,'新宿武蔵野館' => 'purple','その他' => 'black'];
 
     foreach($color_of_place as $place => $color){
       if($place === $_POST['place']){
@@ -46,6 +49,8 @@ if(!empty($_POST)){
   
     $stmt->execute();
 
+    // posts.phpから入力された$_POST['date']をタイムスタンプ値として$_SESSION['time_from_post']に設定
+    // $_SESSION['time_from_post']をindex.phpに引き渡す
     $date = new DateTime($_POST['date']);
     $_SESSION['time_from_post'] = $date->getTimestamp();
     if(date('D', $_SESSION['time_from_post']) === 'Sun' ){
@@ -75,8 +80,8 @@ $minute_array =['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50'
   <a href="index.php"><h1>MINI  THEATER  SCHEDULE</h1></a>
   <div class="sub">
     <ul>
-      <a href="my_posts.php"><li>記録を見る</li></a>
-      <a href="logout.php"><li>ログアウト</li></a>
+      <a href="my_posts.php"><li><span class="fas fa-history"></span>記録を見る</li></a>
+      <a href="logout.php"><li><span class="fas fa-sign-out-alt"></span>ログアウト</li></a>
     </ul>
   </div>
 </div>
@@ -85,7 +90,7 @@ $minute_array =['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50'
 <section class="post">
 <div class="container">
 
-  <h2>あなたが観る予定の映画について教えてください</h2>
+  <h2><span class="far fa-edit"></span> あなたが観る予定の映画について教えてください</h2>
 
   <?php if(!empty($error)): ?>
   <ul class="error">
@@ -97,7 +102,7 @@ $minute_array =['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50'
 
   <form action="post.php" method="post">
     <input type="hidden" name="user_id" value="<?= enc($_SESSION['user_id']) ?>">
-    <div class="place"><label for="place" >どこで観ますか？</label></div>
+    <div class="place"><label for="place" ><span class="fas fa-building"></span> どこで観ますか？</label></div>
     <div>
       <select name="place" id="place">
         <option value="新文芸坐" <?php if(isset($_POST['place']) && enc($_POST['place']) === '新文芸坐'){ echo 'selected'; }?> >新文芸坐</option>
@@ -114,7 +119,7 @@ $minute_array =['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50'
     </div>
     
 
-    <div class="date">いつ上映されますか？</div>
+    <div class="date"><span class="far fa-calendar-check"></span> いつ上映されますか？</div>
     <span class="little">日時   </span>
     <input type="date" name="date" value="<?= date('Y-m-d')?>">
     
@@ -129,7 +134,7 @@ $minute_array =['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50'
     <?php endforeach; ?>   
     </select><span class="little">  分</span>
 
-    <div class="title"><label for="title">タイトルは何ですか？</label></div>
+    <div class="title"><label for="title"><span class="fas fa-film"></span> タイトルは何ですか？</label></div>
     <div><input id="title" type="text" name="title"></div>
     <div><input type="submit" class="submit"></div>
     
