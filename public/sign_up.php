@@ -89,10 +89,10 @@ if(!empty($_POST)){
 
   <form action="sign_up.php" method="post">
     <div class="name"><label for="name" ><span class="fas fa-user"></span> ユーザー名</label></div>
-    <div><input id="name" type="text" name="name" value="<?php if(isset($_POST['name'])){ echo($_POST['name']); } ?>" ></div>
+    <div><input id="name" type="text" name="name" value="<?php if(isset($_POST['name'])){ echo enc($_POST['name']); } ?>" ></div>
 
     <div class="password"><label for="password" ><span class="fas fa-lock"></span> パスワード</label></div>
-    <div><input id="password" type="password" name="password" value="<?php if(isset($_POST['password'])){ echo($_POST['password']); } ?>" ></div>
+    <div><input id="password" type="password" name="password" value="<?php if(isset($_POST['password'])){ echo enc($_POST['password']); } ?>" ></div>
     <div><input type="submit" class="submit"></div>
     
   </form>

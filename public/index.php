@@ -2,9 +2,27 @@
 session_start();
 require_once 'functions.php';
 
+
 // post.php、my_posts.phpで設定された$_SESSION['from']をリセット
 if(isset($_SESSION['from'])){
   $_SESSION['from'] = null;
+}
+
+
+// 最初にログインしたときは$_SESSION['user_select']を'all'にセット
+if(isset($_SESSION['user_id'])){
+  if(empty($_GET['user_select']) && !isset($week_count) ){
+    $_SESSION['user_select'] = 'all';
+  }
+}
+
+// $_SESSION['user_select']がセットされていて、「自分だけの投稿をみる」または「みんなの投稿をみる」がクリックがされた場合に$_SESSION['user_select']の値を切り替える
+if(isset($_GET['user_select'])){
+  if($_GET['user_select'] === 'self'){
+    $_SESSION['user_select'] = 'self';
+  }else{
+    $_SESSION['user_select'] ='all';
+  }
 }
 
 $seconds_of_day = 86400;
@@ -138,23 +156,7 @@ if($day_of_week === 'Sat'){
   list($sat, $sat_detail) = [date('n/j', $target_time), date('Y-m-d', $target_time)];
 }
 
-// $_SESSION['user_select']にセットされている値によって、出力させる投稿を自分だけの投稿か他のユーザーを含めた投稿かに切り替える
 
-// 最初にログインしたときは$_SESSION['user_select']を'all'にセット
-if(isset($_SESSION['user_id'])){
-  if(empty($_GET['user_select']) && !isset($week_count) ){
-    $_SESSION['user_select'] = 'all';
-  }
-}
-
-// $_SESSION['user_select']がセットされており、「自分だけの投稿をみる」または「みんなの投稿をみる」がクリックがされた場合に$_SESSION['user_select']の値を切り替える
-if(isset($_GET['user_select'])){
-  if($_GET['user_select'] === 'self'){
-    $_SESSION['user_select'] = 'self';
-  }else{
-    $_SESSION['user_select'] ='all';
-  }
-}
 
 if(isset($_SESSION['user_id']) && $_SESSION['user_select'] === 'self' ){
   $db = getDb();
@@ -289,12 +291,12 @@ foreach($records as $record){
       <?php foreach($sun_records as $sun_record): ?>
       <article class="plan">
         <ul>
-          <li class="title"><span class="fas fa-film"></span><?= $sun_record['title']; ?></li>
-          <li class="format_time"><span class="far fa-clock"></span><?= $sun_record['format_time']; ?>〜</li> 
-          <li><span class="place <?= $sun_record['color_of_place'] ?>">@<?= $sun_record['place']; ?></span></li>
-          <li class="user_name"><span class="fas fa-user"></span> <?= $sun_record['user_name']; ?></li>
+          <li class="title"><span class="fas fa-film"></span><?= enc($sun_record['title']); ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= enc($sun_record['format_time']); ?>〜</li> 
+          <li><span class="place <?= enc($sun_record['color_of_place']) ?>">@<?= enc($sun_record['place']); ?></span></li>
+          <li class="user_name"><span class="fas fa-user"></span> <?= enc($sun_record['user_name']); ?></li>
           <?php if(isset($_SESSION['user_id']) && $sun_record['user_id'] === $_SESSION['user_id']): ?>
-          <li><a href="delete_post.php?post_id=<?= $sun_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+          <li><a href="delete_post.php?post_id=<?= enc($sun_record['post_id']); ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
           <?php endif; ?>
         </ul>
       </article>
@@ -312,12 +314,12 @@ foreach($records as $record){
       <?php foreach($mon_records as $mon_record): ?>
       <article class="plan">
         <ul>
-          <li class="title"><span class="fas fa-film"></span><?= $mon_record['title']; ?></li>
-          <li class="format_time"><span class="far fa-clock"></span><?= $mon_record['format_time']; ?>〜</li> 
-          <li><span class="place <?= $mon_record['color_of_place'] ?>">@<?= $mon_record['place']; ?></span></li>
-          <li class="user_name"><span class="fas fa-user"></span> <?= $mon_record['user_name']; ?></li>
+          <li class="title"><span class="fas fa-film"></span><?= enc($mon_record['title']); ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= enc($mon_record['format_time']); ?>〜</li> 
+          <li><span class="place <?= enc($mon_record['color_of_place']) ?>">@<?= enc($mon_record['place']); ?></span></li>
+          <li class="user_name"><span class="fas fa-user"></span> <?= enc($mon_record['user_name']); ?></li>
           <?php if(isset($_SESSION['user_id']) && $mon_record['user_id'] === $_SESSION['user_id']): ?>
-            <li><a href="delete_post.php?post_id=<?= $mon_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+            <li><a href="delete_post.php?post_id=<?= enc($mon_record['post_id']); ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
           <?php endif; ?>
         </ul>
       </article>
@@ -335,12 +337,12 @@ foreach($records as $record){
       <?php foreach($tue_records as $tue_record): ?>
       <article class="plan">
         <ul>
-          <li class="title"><span class="fas fa-film"></span><?= $tue_record['title']; ?></li>
-          <li class="format_time"><span class="far fa-clock"></span><?= $tue_record['format_time']; ?>〜</li> 
-          <li><span class="place <?= $tue_record['color_of_place'] ?>">@<?= $tue_record['place']; ?></span></li>
-          <li class="user_name"><span class="fas fa-user"></span> <?= $tue_record['user_name']; ?></li>
+          <li class="title"><span class="fas fa-film"></span><?= enc($tue_record['title']); ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= enc($tue_record['format_time']); ?>〜</li> 
+          <li><span class="place <?= enc($tue_record['color_of_place']) ?>">@<?= enc($tue_record['place']); ?></span></li>
+          <li class="user_name"><span class="fas fa-user"></span> <?= enc($tue_record['user_name']); ?></li>
           <?php if(isset($_SESSION['user_id']) && $tue_record['user_id'] === $_SESSION['user_id']): ?>
-            <li><a href="delete_post.php?post_id=<?= $tue_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+            <li><a href="delete_post.php?post_id=<?= enc($tue_record['post_id']); ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
           <?php endif; ?>
         </ul>
       </article>
@@ -358,12 +360,12 @@ foreach($records as $record){
       <?php foreach($wed_records as $wed_record): ?>
       <article class="plan">
         <ul>
-          <li class="title"><span class="fas fa-film"></span><?= $wed_record['title']; ?></li>
-          <li class="format_time"><span class="far fa-clock"></span><?= $wed_record['format_time']; ?>〜</li> 
-          <li><span class="place <?= $wed_record['color_of_place'] ?>">@<?= $wed_record['place']; ?></span></li>
-          <li class="user_name"><span class="fas fa-user"></span> <?= $wed_record['user_name']; ?></li>
+          <li class="title"><span class="fas fa-film"></span><?= enc($wed_record['title']); ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= enc($wed_record['format_time']); ?>〜</li> 
+          <li><span class="place <?= enc($wed_record['color_of_place']) ?>">@<?= enc($wed_record['place']); ?></span></li>
+          <li class="user_name"><span class="fas fa-user"></span> <?= enc($wed_record['user_name']); ?></li>
           <?php if(isset($_SESSION['user_id']) && $wed_record['user_id'] === $_SESSION['user_id']): ?>
-            <li><a href="delete_post.php?post_id=<?= $wed_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+            <li><a href="delete_post.php?post_id=<?= enc($wed_record['post_id']); ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
           <?php endif; ?>
         </ul>
       </article>
@@ -381,12 +383,12 @@ foreach($records as $record){
       <?php foreach($thu_records as $thu_record): ?>
       <article class="plan">
         <ul>
-          <li class="title"><span class="fas fa-film"></span><?= $thu_record['title']; ?></li>
-          <li class="format_time"><span class="far fa-clock"></span><?= $thu_record['format_time']; ?>〜</li> 
-          <li><span class="place <?= $thu_record['color_of_place'] ?>">@<?= $thu_record['place']; ?></span></li>
-          <li class="user_name"><span class="fas fa-user"></span> <?= $thu_record['user_name']; ?></li>
+          <li class="title"><span class="fas fa-film"></span><?= enc($thu_record['title']); ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= enc($thu_record['format_time']); ?>〜</li> 
+          <li><span class="place <?= enc($thu_record['color_of_place']) ?>">@<?= enc($thu_record['place']); ?></span></li>
+          <li class="user_name"><span class="fas fa-user"></span> <?= enc($thu_record['user_name']); ?></li>
           <?php if(isset($_SESSION['user_id']) && $thu_record['user_id'] === $_SESSION['user_id']): ?>
-            <li><a href="delete_post.php?post_id=<?= $thu_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+            <li><a href="delete_post.php?post_id=<?= enc($thu_record['post_id']); ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
           <?php endif; ?>
         </ul>
       </article>
@@ -404,12 +406,12 @@ foreach($records as $record){
       <?php foreach($fri_records as $fri_record): ?>
       <article class="plan">
         <ul>
-          <li class="title"><span class="fas fa-film"></span><?= $fri_record['title']; ?></li>
-          <li class="format_time"><span class="far fa-clock"></span><?= $fri_record['format_time']; ?>〜</li> 
-          <li><span class="place <?= $fri_record['color_of_place'] ?>">@<?= $fri_record['place']; ?></span></li>
-          <li class="user_name"><span class="fas fa-user"></span> <?= $fri_record['user_name']; ?></li>
+          <li class="title"><span class="fas fa-film"></span><?= enc($fri_record['title']); ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= enc($fri_record['format_time']); ?>〜</li> 
+          <li><span class="place <?= enc($fri_record['color_of_place']) ?>">@<?= enc($fri_record['place']); ?></span></li>
+          <li class="user_name"><span class="fas fa-user"></span> <?= enc($fri_record['user_name']); ?></li>
           <?php if(isset($_SESSION['user_id']) && $fri_record['user_id'] === $_SESSION['user_id']): ?>
-            <li><a href="delete_post.php?post_id=<?= $fri_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+            <li><a href="delete_post.php?post_id=<?= enc($fri_record['post_id']); ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
           <?php endif; ?>
         </ul>
       </article>
@@ -427,12 +429,12 @@ foreach($records as $record){
       <?php foreach($sat_records as $sat_record): ?>
       <article class="plan">
         <ul>
-          <li class="title"><span class="fas fa-film"></span><?= $sat_record['title']; ?></li>
-          <li class="format_time"><span class="far fa-clock"></span><?= $sat_record['format_time']; ?>〜</li> 
-          <li><span class="place <?= $sat_record['color_of_place'] ?>">@<?= $sat_record['place']; ?></span></li>
-          <li class="user_name"><span class="fas fa-user"></span> <?= $sat_record['user_name']; ?></li>
+          <li class="title"><span class="fas fa-film"></span><?= enc($sat_record['title']); ?></li>
+          <li class="format_time"><span class="far fa-clock"></span><?= enc($sat_record['format_time']); ?>〜</li> 
+          <li><span class="place <?= enc($sat_record['color_of_place']) ?>">@<?= enc($sat_record['place']); ?></span></li>
+          <li class="user_name"><span class="fas fa-user"></span> <?= enc($sat_record['user_name']); ?></li>
           <?php if(isset($_SESSION['user_id']) && $sat_record['user_id'] === $_SESSION['user_id']): ?>
-            <li><a href="delete_post.php?post_id=<?= $sat_record['post_id']; ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
+            <li><a href="delete_post.php?post_id=<?= enc($sat_record['post_id']); ?><?php if(isset($week_count)){ echo '&week_count=' . ($week_count-1);} ?>">削除</a></li>
           <?php endif; ?>
         </ul>
       </article>

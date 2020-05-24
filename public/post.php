@@ -27,7 +27,7 @@ if(!empty($_POST)){
 
     // 映画館ごとにカラーを設定する
     // このカラーをpostsテーブルの列として設定
-    $color_of_place = ['新文芸坐' => 'gray' ,'早稲田松竹' => 'brown','シアター・イメージォーラム' => 'red', 'ユーロスペ   ース' => 'lightgreen', 'シネマヴェーラ渋谷' => 'green', '下高井戸シネマ' => 'yellow', 'アンスティチュ・フランセ東京   ' => 'lightblue','国立映画アーカイブ' => 'white' ,'新宿武蔵野館' => 'purple','その他' => 'black'];
+    $color_of_place = ['新文芸坐' => 'gray' ,'早稲田松竹' => 'brown','シアター・イメージォーラム' => 'red', 'ユーロスペース' => 'lightgreen', 'シネマヴェーラ渋谷' => 'green', '下高井戸シネマ' => 'yellow', 'アンスティチュ・フランセ東京' => 'lightblue','国立映画アーカイブ' => 'white' ,'新宿武蔵野館' => 'purple', 'その他' => 'black'];
 
     foreach($color_of_place as $place => $color){
       if($place === $_POST['place']){

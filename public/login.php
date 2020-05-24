@@ -12,6 +12,28 @@ if(isset($_SESSION['from'])){
   }
 }
 
+// テストユーザーとしてログイン
+if(isset($_GET['user']) &&  $_GET['user'] === 'test_user' ){
+  $db = getDb();
+  $db->exec('INSERT INTO users(user_name, password) VALUES("test_user", "000000")');
+  $user_id = $db->lastInsertId();
+  $db = null;
+  $_SESSION['user_id'] = (int)$user_id;
+
+  if(isset($_SESSION['from'])){
+    if($_SESSION['from'] === 'post'){
+    header('Location:post.php');   
+    exit();
+    }else{
+    header('Location:my_posts.php');   
+    exit();
+    }
+  }
+
+  header('Location:index.php');
+  exit();
+}
+
 if(!empty($_POST)){
   if(empty($_POST['name'])){
     $error['name'] = '名前を入力してください';
@@ -82,11 +104,15 @@ if(!empty($_POST)){
 </div>
 <?php endif ;?>
 
+
+
 <section class="login">
 <div class="container">
 
-  <h2><span class="fas fa-sign-in-alt"> ログイン</h2>
-  <div><a href="sign_up.php">※登録がまだの方はこちらから</a></div>
+  <h2><span class="fas fa-sign-in-alt"></span> ログイン</h2>
+  <div><a href="sign_up.php">※登録がまだの方はこちらから<span class="fas fa-user-plus"></span></a></div>
+
+  <a class="test-user" href="login.php?user=test_user" ><span class="fas fa-chevron-right"> テストユーザーとしてログイン</span></a>
 
   <?php if(!empty($error)): ?>
   <ul class="error">
@@ -98,10 +124,10 @@ if(!empty($_POST)){
   
   <form action="login.php" method="post">
     <div class="name"><label for="name"><span class="fas fa-user"></span>  ユーザー名</label></div>
-    <div><input id="name" type="text" name="name" value="<?php if(isset($_POST['name'])){ echo($_POST['name']); } ?>"></div>
+    <div><input id="name" type="text" name="name" value="<?php if(isset($_POST['name'])){ echo enc($_POST['name']); } ?>"></div>
 
     <div class="password"><label for="password" ><span class="fas fa-lock"></span> パスワード</label></div>
-    <div><input id="password" type="password" name="password" value="<?php if(isset($_POST['password'])){ echo($_POST['password']); } ?>"></div>
+    <div><input id="password" type="password" name="password" value="<?php if(isset($_POST['password'])){ echo enc($_POST['password']); } ?>"></div>
     <div><input type="submit" class="submit"></div>
     
   </form>
