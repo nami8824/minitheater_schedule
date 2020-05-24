@@ -365,6 +365,9 @@ body {
 		border-radius: 0.3rem;
 	}
 	
+	.conB .yellow, .conB .white {
+		color: #000000;
+	}
 }
 
 
