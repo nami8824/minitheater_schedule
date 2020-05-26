@@ -28,8 +28,9 @@ URL [minitheater_schedule](https://infinite-taiga-85491.herokuapp.com)
   
 ![記録](https://user-images.githubusercontent.com/58389827/82874142-7b2e3200-9f70-11ea-9be9-1fad67c2466a.png)
 
-## リスポンシブ対応
+## レスポンシブ対応
 ブラウザの幅によってレイアウトが変化します  
+![レスポンシブ](https://user-images.githubusercontent.com/58389827/82876116-3eb00580-9f73-11ea-996e-a34943b21f06.gif)
 
 # 開発環境  
 - macOS Mojave バージョン10.14.6
