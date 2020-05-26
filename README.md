@@ -12,6 +12,7 @@ URL [minitheater_schedule](https://infinite-taiga-85491.herokuapp.com)
 ## 投稿一覧
 週単位で画面を移動できます  
 また表示する投稿を自分だけにするか、全てのユーザーにするかを切り替えることも可能です  
+![画面移動](https://user-images.githubusercontent.com/58389827/82873766-f216fb00-9f6f-11ea-82f0-fd24dd26af65.gif)
 
 ## 投稿
 映画館、上映日、タイトルを選択して投稿  
